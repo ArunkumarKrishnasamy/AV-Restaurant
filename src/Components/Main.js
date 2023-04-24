@@ -1,18 +1,21 @@
 import React from "react";
 import ProductInfo from "../ProductInfo";
 
+import Inventory from "./Inventory";
+import { Link } from "react-router-dom";
+
 function Main() {
   return (
     <>
       <div className="row container">
         <div className="col-10 d-flex justify-content-start ">
           <div className="title">
-            <h6 className="mt-3">Product Name</h6>
+            <h6 className="mt-2">Product Name</h6>
             <div>
               <i className="fa  fa-2x fa-star"></i>
               <span className="fs-2 text-muted"> e.g. Cheese Burger</span>
               <br />
-              <div className="row mt-3">
+              <div className="row mt-2">
                 <span className="col-5">
                   <div className="form-check">
                     <input
@@ -42,11 +45,13 @@ function Main() {
               </div>
             </div>
 
-            <div className=" row mt-3 SwitchTab p-1 ">
-              <div className="col-7 ">General Information</div>
-              <div style={{ borderLeft: "1px solid black" }} className="col-5 ">
-                Inventory
-              </div>
+            <div className=" row mt-1 SwitchTab p-1 ">
+              <Link to={"/"} className="col-7 ">
+                <button>General Information</button>
+              </Link>
+              <Link to={"/inventory"} className="col-5 ">
+                <button>Inventory</button>
+              </Link>
             </div>
           </div>
         </div>
@@ -58,7 +63,6 @@ function Main() {
         </div>
       </div>
       <hr></hr>
-      <ProductInfo />
     </>
   );
 }
