@@ -1,6 +1,7 @@
 import React from "react";
 import "../../node_modules/font-awesome/css/font-awesome.min.css";
 import Card from "./Card";
+import { Formik, useFormik } from "formik";
 
 let Array = [
   {

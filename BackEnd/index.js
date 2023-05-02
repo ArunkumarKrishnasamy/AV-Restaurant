@@ -16,15 +16,15 @@ app.use(
 app.post("/products", async (req, res) => {
   try {
     const {
-      sales_price,
+      available_units,
       cost,
-      product_category,
+      product_name,
       product_tags,
       internal_notes,
     } = req.body;
     const addrow = await pool.query(
-      "INSERT INTO products(sales_price, cost, product_category, product_tags,internal_notes) VALUES($1,$2,$3,$4,$5) RETURNING *",
-      [sales_price, cost, product_category, product_tags, internal_notes]
+      "INSERT INTO products(available_units, cost, product_name, product_tags,internal_notes) VALUES($1,$2,$3,$4,$5) RETURNING *",
+      [available_units, cost, product_name, product_tags, internal_notes]
     );
     res.status(201).json(addrow.rows[0]);
   } catch (error) {
