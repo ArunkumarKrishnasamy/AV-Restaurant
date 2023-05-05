@@ -2,10 +2,17 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
+// dependencies
+const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
+
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
+
 // Middleware
 const cors = require("cors");
 const { Pool } = require("pg");
-const pool = require("./db");
+const pool = require("./dbConfig");
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -40,6 +47,54 @@ app.get("/products", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.json({ message: "Getting data went wrong" });
+  }
+});
+
+// Log In
+const bcrypt = require("bcryptjs");
+
+app.post("/register", async (req, res) => {
+  try {
+    let { inputemail, inputpassword, username } = req.body;
+    let salt = bcrypt.genSaltSync(10);
+    let hash = bcrypt.hashSync(inputpassword, salt);
+    inputpassword = hash;
+    const addUser = await pool.query(
+      "INSERT INTO login (inputemail, inputpassword, username) VALUES ($1,$2,$3) RETURNING *",
+      [inputemail, inputpassword, username]
+    );
+    res.status(200).json(addUser.rows[0]);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+});
+const jwt = require("jsonwebtoken");
+app.post("/login", async (req, res) => {
+  try {
+    let { email, password } = req.body;
+    var user = await pool.query("SELECT * FROM login WHERE inputemail= $1", [
+      email,
+    ]);
+    user = user.rows[0];
+    if (user) {
+      let compare = bcrypt.compareSync(password, user.inputpassword);
+      if (compare) {
+        let token = jwt.sign({ inputemail: user.inputemail }, "secretkey");
+        res.json(token);
+      } else {
+        res.status(401).json({ message: "Password doesn't match" });
+      }
+    } else {
+      res.status(404).json({ message: "User Email not found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Something went wrong",
+    });
   }
 });
 
