@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   let navigate = useNavigate();
+  const [handleError, setHandleError] = useState(false);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -24,9 +25,14 @@ function Login() {
       try {
         let logInData = await axios.post("http://localhost:3001/login", values);
         window.localStorage.setItem("apptoken", logInData.data);
-        navigate("/success");
+        navigate("/products");
         console.log(logInData.data);
       } catch (error) {
+        if ((error.response.status = 401 || 404)) {
+          setHandleError(true);
+          formik.resetForm();
+        }
+
         console.error(error);
       }
     },
@@ -152,12 +158,24 @@ function Login() {
               onChange={formik.handleChange}
               value={formik.values.password}
               onBlur={formik.handleBlur}
-            />{" "}
+            />
+
             <span style={{ color: "red" }}>
               {formik.touched.password && formik.errors.password ? (
                 <div>{formik.errors.password}</div>
               ) : null}
             </span>
+            {handleError ? (
+              <div style={{ color: "red" }}>
+                User Email/ Password is incorrect. Please Enter valid
+                Credentials
+                <span>
+                  {setTimeout(() => {
+                    setHandleError(false);
+                  }, 5000)}
+                </span>
+              </div>
+            ) : null}
           </div>
           <button type="submit" className="btn btn-primary btn-lg mb-3 ">
             Login

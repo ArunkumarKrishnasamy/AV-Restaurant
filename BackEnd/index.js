@@ -19,8 +19,25 @@ app.use(
   })
 );
 
+// Authenticate
+function authenticate(req, res, next) {
+  // check jwt token
+
+  if (req.headers.authorization) {
+    let decode = jwt.verify(req.headers.authorization, "secretkey");
+    if (decode) {
+      // req.id = decode.id;
+      next();
+    } else {
+      res.status(401).json({ message: "Invalid token" });
+    }
+  } else {
+    res.status(401).json({ message: "User is Unauthorized" });
+  }
+}
+
 // Routes
-app.post("/products", async (req, res) => {
+app.post("/products", authenticate, async (req, res) => {
   try {
     const {
       available_units,
@@ -40,7 +57,7 @@ app.post("/products", async (req, res) => {
   }
 });
 
-app.get("/products", async (req, res) => {
+app.get("/products", authenticate, async (req, res) => {
   try {
     const products = await pool.query("SELECT * FROM products");
     res.status(200).json(products.rows);
@@ -82,7 +99,10 @@ app.post("/login", async (req, res) => {
     if (user) {
       let compare = bcrypt.compareSync(password, user.inputpassword);
       if (compare) {
-        let token = jwt.sign({ inputemail: user.inputemail }, "secretkey");
+        let token = jwt.sign(
+          { inputemail: user.inputemail, id: user.id },
+          "secretkey"
+        );
         res.json(token);
       } else {
         res.status(401).json({ message: "Password doesn't match" });

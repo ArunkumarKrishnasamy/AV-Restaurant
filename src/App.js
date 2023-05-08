@@ -14,12 +14,12 @@ function App() {
     <BrowserRouter>
       <div className="container content">
         <Routes>
-          <Route path="/" element={<AddComponent />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="register" element={<Registration />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/products" element={<AddComponent />} />
+          <Route path="/register" element={<Registration />} />
           <Route path="/home" element={<Home />} />
           <Route path="/inventory" element={<Inventory />} />
-          <Route path="/success" element={<Success />} />
+          {/* <Route path="/success" element={<Success />} /> */}
         </Routes>
       </div>
     </BrowserRouter>

@@ -14,9 +14,13 @@ function Main() {
     },
     onSubmit: async (values) => {
       try {
-        await axios.post("http://localhost:3001/products", values);
+        await axios.post("http://localhost:3001/products", values, {
+          headers: {
+            Authorization: window.localStorage.getItem("apptoken"),
+          },
+        });
         alert("Product added");
-        navigate("/");
+        navigate("/products");
       } catch (error) {
         console.error(error);
         alert("Error in submitting");
@@ -81,7 +85,7 @@ function Main() {
               </div>
 
               <div className=" row mt-1 SwitchTab p-1 ">
-                <Link to={"/"} className="col-7 ">
+                <Link to={"/home"} className="col-7 ">
                   <button>General Information</button>
                 </Link>
                 <Link to={"/inventory"} className="col-5 ">
