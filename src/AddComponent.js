@@ -27,6 +27,21 @@ function AddComponent() {
   useEffect(() => {
     fetchProducts();
   }, []);
+  const HandleDelete = async (id) => {
+    try {
+      let ask = window.confirm("Are You sure to Delete this?");
+      if (ask) {
+        await axios.delete(`http://localhost:3001/products/${id}`, {
+          headers: { Authorization: window.localStorage.getItem("apptoken") },
+        });
+        alert("Deleted");
+        fetchProducts();
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    }
+  };
   return (
     <div className="container">
       <div className="text-secondary-emphasis mt-3 fs-4">
@@ -52,7 +67,7 @@ function AddComponent() {
       <hr></hr>
       <div className="row g-0">
         {products.map((product) => {
-          const { available_units, cost, product_name } = product;
+          const { available_units, cost, product_name, id } = product;
           return (
             <div
               className="d-flex flex-row card m-3"
@@ -68,7 +83,14 @@ function AddComponent() {
                       {product_name}
                     </span>
                     <span className="d-flex justify-content-end align-items-end">
-                      <button className=" btn btn-sm btn-danger">X</button>
+                      <button
+                        onClick={() => {
+                          HandleDelete(id);
+                        }}
+                        className=" btn btn-sm btn-danger"
+                      >
+                        X
+                      </button>
                     </span>
                   </div>
                 </div>
@@ -76,7 +98,6 @@ function AddComponent() {
                 <div className="card-body">
                   <p className="card-text">Availabe: {available_units} units</p>
                   <p>
-                    {" "}
                     Cost: <i class="fa fa-inr"></i>
                     {cost}
                   </p>

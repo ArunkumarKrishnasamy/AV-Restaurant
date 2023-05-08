@@ -66,6 +66,19 @@ app.get("/products", authenticate, async (req, res) => {
     res.json({ message: "Getting data went wrong" });
   }
 });
+app.delete("/products/:id", authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const deleteProduct = await pool.query("DELETE FROM products WHERE id=$1", [
+      id,
+    ]);
+    res.status(200).json({ message: "Product deleted" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Delete went wrong" });
+  }
+});
 
 // Log In
 const bcrypt = require("bcryptjs");
