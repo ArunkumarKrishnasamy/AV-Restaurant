@@ -18,6 +18,19 @@ function Home() {
       cost: "1200",
       product_tags: "inventory",
     },
+    validate: (values) => {
+      const errors = {};
+      if (!values.product_name) {
+        errors.product_name = "Product Name can't be Empty";
+      }
+      if (!values.available_units) {
+        errors.available_units = "Please Enter Available No. of Units";
+      }
+      if (!values.cost) {
+        errors.cost = "Please Enter the Product Cost";
+      }
+      return errors;
+    },
     onSubmit: async (values) => {
       try {
         await axios.post("http://localhost:3001/products", values, {
@@ -99,6 +112,11 @@ function Home() {
                       value={formik.values.product_name}
                       onBlur={formik.handleBlur}
                     ></input>
+                    {formik.errors.product_name ? (
+                      <span className="ms-1 fw-semi-bold text-warning">
+                        {formik.errors.product_name}
+                      </span>
+                    ) : null}
 
                     <br />
                     <div className="row mt-2">
@@ -180,6 +198,12 @@ function Home() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
+                  <br />
+                  {formik.errors.available_units ? (
+                    <span className="ms-1 fw-semi-bold text-warning">
+                      {formik.errors.available_units}
+                    </span>
+                  ) : null}
                 </div>
               </div>
               <div className="row mt-2">
@@ -197,6 +221,12 @@ function Home() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
+                  <br />
+                  {formik.errors.cost ? (
+                    <span className="ms-1 fw-semi-bold text-warning">
+                      {formik.errors.cost}
+                    </span>
+                  ) : null}
                 </div>
               </div>
               <div className="row mt-2">

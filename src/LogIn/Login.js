@@ -37,6 +37,7 @@ function Login() {
       }
     },
   });
+
   return (
     <div className="container row ">
       <div>
@@ -169,11 +170,6 @@ function Login() {
               <div style={{ color: "red" }}>
                 User Email/ Password is incorrect. Please Enter valid
                 Credentials
-                <span>
-                  {setTimeout(() => {
-                    setHandleError(false);
-                  }, 5000)}
-                </span>
               </div>
             ) : null}
           </div>

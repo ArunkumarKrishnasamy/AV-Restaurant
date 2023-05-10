@@ -4,6 +4,10 @@ import axios from "axios";
 
 function AddComponent() {
   const [products, setProducts] = useState([]);
+  const [starFilled, setStarFilled] = useState(false);
+  const toggleStar = (id) => {
+    setStarFilled(!starFilled);
+  };
   const navigate = useNavigate();
   const handleLogout = () => {
     let ask = window.confirm("Are You sure do you want to Log Out?");
@@ -22,6 +26,7 @@ function AddComponent() {
     } catch (error) {
       console.error(error);
       alert("Unauthorised access, Please logIn");
+      navigate("/");
     }
   };
   useEffect(() => {
@@ -43,18 +48,91 @@ function AddComponent() {
     }
   };
   return (
-    <div className="container">
+    <div className="container tex-center">
       <div className="text-secondary-emphasis mt-3 fs-4">
-        <h1>Products</h1>
         <div className="row">
-          <div className="col d-flex justify-content-start">
+          <div className="col-8">
+            <h4 className="text-muted">Products</h4>
+          </div>
+          <div className="col-4 ">
+            <div className="form-control">
+              <span>
+                <i class="fa fa-search" aria-hidden="true"></i>
+              </span>
+              <span className="ms-1">
+                <input
+                  type="text"
+                  className=" mt-1"
+                  name="search"
+                  id="search"
+                  placeholder="Search...."
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="row align-items-end mt-2">
+          <div className="col-5">
             <Link to={"/home"}>
-              <button className="btn btn-success mt-2"> New</button>
+              <button className="btn btn-success"> NEW</button>
             </Link>
           </div>
-          <div className="col d-flex justify-content-end">
+          <div className="col-5 row">
+            <div className=" col-3 filterBy">
+              <span>
+                <img
+                  width="20"
+                  height="20"
+                  src="https://img.icons8.com/ios-filled/50/filter--v1.png"
+                  alt="filter--v1"
+                />
+              </span>
+              <span className="fs-6 text-dark">Filters</span>
+            </div>
+            <div className="col-3 groupBy">
+              <span>
+                <img
+                  width="20"
+                  height="20"
+                  src="https://img.icons8.com/sf-regular-filled/48/layers.png"
+                  alt="layers"
+                />
+              </span>
+              <span className="fs-6 text-dark">Groupby</span>
+            </div>
+            <div className="col-4 favourites">
+              <span>
+                <img
+                  width="20"
+                  height="20"
+                  src="https://img.icons8.com/ios-glyphs/30/star--v1.png"
+                  alt="star--v1"
+                />
+              </span>
+              <span className="fs-6 text-dark">Favourites</span>
+            </div>
+            <div className="col-2 pagination">
+              <button className="btn">
+                <img
+                  width="20"
+                  height="20"
+                  src="https://img.icons8.com/ios-glyphs/30/less-than.png"
+                  alt="less-than"
+                />
+              </button>
+              <button className="btn">
+                <img
+                  width="20"
+                  height="20"
+                  src="https://img.icons8.com/ios-glyphs/50/more-than.png"
+                  alt="more-than"
+                />
+              </button>
+            </div>
+          </div>
+          <div className="col-2">
             <button
-              className="btn btn-danger mt-2"
+              className="btn btn-danger ms-5"
               onClick={() => {
                 handleLogout();
               }}
@@ -78,16 +156,27 @@ function AddComponent() {
               </div>
               <div className="col-9">
                 <div className="card-header text-success fw-bolder">
-                  <div className="">
-                    <span className="d-flex justify-content-start align-items-start">
+                  <div className="row">
+                    <span className="col-6 d-flex justify-content-start align-items-start">
                       {product_name}
                     </span>
-                    <span className="d-flex justify-content-end align-items-end">
+
+                    <span
+                      className={`star col-3 mt-0 ${
+                        starFilled ? "star-filled" : ""
+                      }`}
+                      onClick={() => {
+                        toggleStar(id);
+                      }}
+                    >
+                      &#9734;
+                    </span>
+                    <span className="col-1  align-items-end">
                       <button
                         onClick={() => {
                           HandleDelete(id);
                         }}
-                        className=" btn btn-sm btn-danger"
+                        className=" btn btn-sm btn-danger "
                       >
                         X
                       </button>

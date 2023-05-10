@@ -27,3 +27,20 @@ div > .dashboard {
   border-bottom: 1px solid rgb(183, 179, 179);
   font-size: 13px;
 }
+#search {
+  border: none;
+  width: 300px;
+}
+#search:focus {
+  outline: none;
+}
+.star {
+  font-size: 35px;
+  cursor: pointer;
+  color: black;
+}
+
+.star-filled {
+  color: gold;
+  /* fill: gold; */
+}
